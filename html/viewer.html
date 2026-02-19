@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Vision — Best JSON Formatter and JSON Validator Chrome Extension</title>
+  <link rel="stylesheet" href="../css/viewer.css">
+  <link rel="stylesheet" href="../css/graph.css">
+  <link rel="stylesheet" href="../css/ui-renderer.css">
+</head>
+<body>
+  <!-- Main Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="brand">
+        <a href="https://dub.sh/sourcelogs" target="_blank" class="brand-link">
+          <img class="brand-icon" src="../icons/logo.png" alt="JSON Vision">
+          <span class="brand-name">JSON Vision</span>
+        </a>
+        <span class="brand-separator">|</span>
+        <span class="brand-tagline">built by <a href="https://dub.sh/sourcelogs" target="_blank">sourcelogs.com</a></span>
+        <span class="brand-separator">|</span>
+        <a href="https://dub.sh/fiverr-profile" target="_blank" class="hire-link">Hire Me</a>
+      </div>
+    </div>
+    <div class="toolbar-right">
+      <!-- Undo/Redo buttons - hidden by default -->
+      <div class="toolbar-group undo-redo-group" id="undo-redo-group" style="display: none;">
+        <button class="btn btn-icon" id="undo-btn" title="Undo (Ctrl+Z)" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path></svg>
+        </button>
+        <button class="btn btn-icon" id="redo-btn" title="Redo (Ctrl+Y)" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"></path><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path></svg>
+        </button>
+        <div class="btn-divider"></div>
+      </div>
+      <div class="dropdown" id="theme-dropdown">
+        <button class="btn dropdown-toggle" id="theme-btn" title="Select a Theme">
+          <span>Select a Theme</span>
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" class="dropdown-arrow"><path d="M4 6l4 4 4-4z"/></svg>
+        </button>
+        <div class="dropdown-menu dropdown-menu-left" id="theme-menu">
+          <div class="dropdown-menu-inner">
+            <div class="dropdown-item theme-item" data-theme="dark"><span class="theme-dot" style="background:#0c0c0d"></span>Dark</div>
+            <div class="dropdown-item theme-item" data-theme="light"><span class="theme-dot" style="background:#ffffff; border: 1px solid #ccc;"></span>Light</div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item theme-item" data-theme="monokai"><span class="theme-dot" style="background:#272822"></span>Monokai</div>
+            <div class="dropdown-item theme-item" data-theme="dracula"><span class="theme-dot" style="background:#282a36"></span>Dracula</div>
+            <div class="dropdown-item theme-item" data-theme="nord"><span class="theme-dot" style="background:#2e3440"></span>Nord</div>
+            <div class="dropdown-item theme-item" data-theme="solarized"><span class="theme-dot" style="background:#002b36"></span>Solarized Dark</div>
+            <div class="dropdown-item theme-item" data-theme="github"><span class="theme-dot" style="background:#0d1117"></span>GitHub Dark</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-divider"></div>
+      <div class="toolbar-group">
+        <button class="btn" id="expand-all" title="Expand All"><span>Expand All</span></button>
+        <button class="btn" id="collapse-all" title="Collapse All"><span>Collapse All</span></button>
+      </div>
+      <div class="btn-divider"></div>
+      <div class="toolbar-group">
+        <div class="dropdown" id="copy-dropdown">
+          <button class="btn dropdown-toggle" id="copy-btn" title="Copy As"><span>Copy</span><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" class="dropdown-arrow"><path d="M4 6l4 4 4-4z"/></svg></button>
+          <div class="dropdown-menu" id="copy-menu">
+            <div class="dropdown-menu-inner">
+              <div class="dropdown-item" data-action="copy-json">Copy Raw JSON</div>
+              <div class="dropdown-item" data-action="copy-minified">Copy Minified JSON</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" data-action="copy-curl">Copy as cURL</div>
+              <div class="dropdown-item" data-action="copy-js">Copy as JavaScript</div>
+              <div class="dropdown-item" data-action="copy-python">Copy as Python</div>
+              <div class="dropdown-item" data-action="copy-typescript">Copy as TypeScript Interface</div>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown" id="export-dropdown">
+          <button class="btn dropdown-toggle" id="export-btn" title="Export As"><span>Export As</span><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" class="dropdown-arrow"><path d="M4 6l4 4 4-4z"/></svg></button>
+          <div class="dropdown-menu" id="export-menu">
+            <div class="dropdown-menu-inner">
+              <div class="dropdown-item" data-action="export-json">Export as JSON</div>
+              <div class="dropdown-item" data-action="export-csv">Export as CSV</div>
+              <div class="dropdown-item" data-action="export-excel">Export as Excel</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" data-action="export-yaml">Export as YAML</div>
+              <div class="dropdown-item" data-action="export-typescript">Export as TypeScript</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-divider"></div>
+      <button class="btn" id="import-url-btn" title="Import from URL"><span>Import URL</span></button>
+      <div class="btn-divider"></div>
+      <button class="btn" id="compare-btn" title="Compare"><span>Compare</span></button>
+      <button class="btn" id="table-btn" title="Table View"><span>Table</span></button>
+      <button class="btn" id="graph-btn" title="Graph View"><span>Graph</span></button>
+      <button class="btn" id="ui-btn" title="UI Preview"><span>UI</span></button>
+      <button class="btn" id="raw-btn" title="Raw View"><span id="raw-btn-text">Raw</span></button>
+    </div>
+  </div>
+
+  <!-- Search Bar with Stats and Path -->
+  <div class="search-bar">
+    <div class="search-left">
+      <div class="search-input-wrapper">
+        <input type="text" id="search-input" placeholder="Search keys, values, or path (e.g. .product.variants[].price)">
+        <button class="search-clear" id="search-clear" title="Clear">×</button>
+      </div>
+      <div class="search-options">
+        <label class="search-option"><input type="checkbox" id="search-keys" checked> Keys</label>
+        <label class="search-option"><input type="checkbox" id="search-values" checked> Values</label>
+        <label class="search-option"><input type="checkbox" id="search-case"> Case sensitive</label>
+        <button class="btn btn-jq" id="jq-mode-btn">JQ Query</button>
+      </div>
+      <div class="search-nav" id="search-nav">
+        <button class="search-nav-btn" id="search-prev" title="Previous match">▲</button>
+        <span class="search-nav-info" id="search-nav-info">0 / 0</span>
+        <button class="search-nav-btn" id="search-next" title="Next match">▼</button>
+      </div>
+      <span class="search-results" id="search-results"></span>
+    </div>
+    <div class="search-right">
+      <div class="path-display" id="breadcrumb-bar">
+        <div class="breadcrumb-content">
+          <span class="breadcrumb-item" data-path="">root</span>
+        </div>
+        <button class="breadcrumb-copy-btn" id="breadcrumb-copy" title="Copy Path">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2z"/></svg>
+        </button>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </div>
+
+  <!-- JQ Query Modal -->
+  <div class="modal" id="jq-modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content jq-modal-content">
+      <div class="modal-header">
+        <h3>JQ Query</h3>
+        <button class="btn btn-icon modal-close" id="jq-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="jq-input-section">
+          <div class="jq-input-row">
+            <span class="jq-prefix">jq</span>
+            <input type="text" id="jq-input" placeholder=".data.users[] | select(.active)">
+            <button class="btn" id="jq-clear">Clear</button>
+            <button class="btn btn-primary" id="jq-run">Run</button>
+          </div>
+          <div class="jq-examples">
+            <span class="jq-label">Examples:</span>
+            <button class="jq-example" data-query=".">Identity</button>
+            <button class="jq-example" data-query="keys">keys</button>
+            <button class="jq-example" data-query=".[]">Iterate</button>
+            <button class="jq-example" data-query="length">length</button>
+            <button class="jq-example" data-query=".[0]">First</button>
+            <button class="jq-example" data-query=".[-1]">Last</button>
+          </div>
+        </div>
+        <div class="jq-results-section">
+          <div class="jq-results-header">Result</div>
+          <div class="jq-results" id="jq-results">
+            <span class="jq-placeholder">Run a query to see results...</span>
+          </div>
+        </div>
+        <div class="jq-actions">
+          <button class="btn" id="jq-copy-result">Copy Result</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GraphQL Banner -->
+  <div class="graphql-banner" id="graphql-banner" style="display: none;">
+    <span>⬡ GraphQL Response Detected</span>
+    <div class="graphql-tabs">
+      <button class="graphql-tab active" data-view="all">All</button>
+      <button class="graphql-tab" data-view="data">Data</button>
+      <button class="graphql-tab" data-view="errors">Errors</button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- JSON Tree View -->
+    <div class="json-container" id="json-container">
+      <div class="loading" id="loading"><div class="spinner"></div><span>Parsing JSON...</span></div>
+      <div id="json-output"></div>
+    </div>
+
+    <!-- Raw View -->
+    <div class="raw-container" id="raw-container" style="display: none;"><pre id="raw-output"></pre></div>
+
+    <!-- Compare/Diff View -->
+    <div class="diff-container" id="diff-container" style="display: none;">
+      <div class="diff-toolbar">
+        <div class="diff-toolbar-left">
+          <h3>🔄 Compare JSON</h3>
+          <p>Paste another JSON below to compare.</p>
+        </div>
+        <div class="diff-toolbar-right">
+          <button class="btn btn-back" id="diff-back"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 3L3 8l4 5v-3h6V6H7V3z"/></svg> Back to Tree</button>
+        </div>
+      </div>
+      <div class="diff-input-area">
+        <textarea id="diff-input" placeholder="Paste JSON to compare..."></textarea>
+        <div class="diff-buttons">
+          <button class="btn btn-primary" id="diff-compare">Compare Now</button>
+          <button class="btn" id="diff-clear">Clear</button>
+        </div>
+      </div>
+      <div class="diff-results" id="diff-results"></div>
+    </div>
+
+    <!-- Table View -->
+    <div class="table-view-container" id="table-view-container" style="display: none;">
+      <div class="table-view-toolbar">
+        <div class="table-view-toolbar-left">
+          <span class="table-info" id="table-info"></span>
+        </div>
+        <div class="table-view-toolbar-right">
+          <button class="btn" id="table-export-json">📄 Export JSON</button>
+          <button class="btn" id="table-export-csv">📊 Export CSV</button>
+          <button class="btn" id="table-export-excel">📗 Export Excel</button>
+          <div class="table-separator"></div>
+          <button class="btn btn-back" id="table-back"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 3L3 8l4 5v-3h6V6H7V3z"/></svg> Back to Tree</button>
+        </div>
+      </div>
+      <div class="table-content" id="table-content"></div>
+    </div>
+
+    <!-- Graph View -->
+    <div class="graph-container" id="graph-container" style="display: none;">
+      <div class="graph-toolbar">
+        <div class="graph-toolbar-left">
+          <div class="graph-legend">
+            <span class="legend-item"><span class="legend-color" style="background:#667eea"></span>Object</span>
+            <span class="legend-item"><span class="legend-color" style="background:#a855f7"></span>Array</span>
+            <span class="legend-item"><span class="legend-color" style="background:#22c55e"></span>String</span>
+            <span class="legend-item"><span class="legend-color" style="background:#3b82f6"></span>Number</span>
+            <span class="legend-item"><span class="legend-color" style="background:#f59e0b"></span>Boolean</span>
+            <span class="legend-item"><span class="legend-color" style="background:#6b7280"></span>Null</span>
+          </div>
+        </div>
+        <div class="graph-toolbar-right">
+          <button class="btn btn-icon" id="graph-expand-all">⊞</button>
+          <button class="btn btn-icon" id="graph-collapse-all">⊟</button>
+          <div class="graph-separator"></div>
+          <button class="btn btn-icon" id="graph-zoom-in">+</button>
+          <button class="btn btn-icon" id="graph-zoom-out">−</button>
+          <button class="btn btn-icon" id="graph-reset">⟳</button>
+          <div class="graph-separator"></div>
+          <button class="btn btn-back" id="graph-back"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 3L3 8l4 5v-3h6V6H7V3z"/></svg> Back to Tree</button>
+        </div>
+      </div>
+      <div class="graph-canvas" id="graph-canvas"></div>
+      <div class="graph-info-panel" id="graph-info-panel">
+        <div class="info-panel-header"><span>Node Details</span><button class="btn btn-icon" id="close-info-panel">×</button></div>
+        <div class="info-panel-content" id="info-panel-content"><p class="info-placeholder">Click a node to see details</p></div>
+      </div>
+    </div>
+
+    <!-- UI Preview View -->
+    <div class="ui-container" id="ui-container" style="display: none;">
+      <div class="ui-toolbar">
+        <span class="ui-toolbar-label">JSON to UI Preview</span>
+        <button class="btn btn-back" id="ui-back"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 3L3 8l4 5v-3h6V6H7V3z"/></svg> Back to Tree</button>
+      </div>
+      <div class="ui-canvas" id="ui-canvas"></div>
+    </div>
+  </div>
+
+  <!-- Import URL Modal -->
+  <div class="modal" id="import-modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header"><h3>Import JSON from URL</h3><button class="btn btn-icon modal-close" id="import-modal-close">×</button></div>
+      <div class="modal-body">
+        <label class="modal-label">Enter URL:</label>
+        <input type="url" id="import-url-input" placeholder="https://api.example.com/data.json" class="modal-input">
+        <p class="modal-hint">The extension will fetch and display the JSON response.</p>
+        <div class="modal-error" id="import-error" style="display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="import-cancel">Cancel</button>
+        <button class="btn btn-primary" id="import-fetch">Fetch JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Value Modal -->
+  <div class="modal" id="edit-modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header"><h3>Edit Value</h3><button class="btn btn-icon modal-close" id="edit-modal-close">×</button></div>
+      <div class="modal-body">
+        <label class="modal-label">Key:</label>
+        <input type="text" id="edit-key-input" class="modal-input" style="margin-bottom: 12px;">
+        <label class="modal-label">Value:</label>
+        <textarea id="edit-value-input" class="modal-input" rows="4" style="resize: vertical; font-family: monospace;"></textarea>
+        <p class="modal-hint">For strings use quotes, for objects/arrays use JSON syntax.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="edit-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="edit-modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div class="context-menu" id="context-menu">
+    <div class="context-menu-section">Copy</div>
+    <div class="context-menu-item" id="ctx-copy-path"><span>📋</span> Copy Path <span class="shortcut" id="ctx-path-preview"></span></div>
+    <div class="context-menu-item has-submenu" id="ctx-copy-path-as">
+      <span>📋</span> Copy Path As
+      <span class="submenu-arrow">▶</span>
+      <div class="context-submenu" id="copy-path-submenu">
+        <div class="context-menu-item" id="ctx-path-jsonpath"><span>📍</span> JSONPath</div>
+        <div class="context-menu-item" id="ctx-path-jq"><span>🔧</span> JQ</div>
+        <div class="context-menu-item" id="ctx-path-javascript"><span>🟨</span> JavaScript</div>
+        <div class="context-menu-item" id="ctx-path-python"><span>🐍</span> Python</div>
+      </div>
+    </div>
+    <div class="context-menu-item" id="ctx-copy-key"><span>🔑</span> Copy Key</div>
+    <div class="context-menu-item" id="ctx-copy-value"><span>📄</span> Copy Value</div>
+    <div class="context-menu-item" id="ctx-copy-complete"><span>📦</span> Copy Complete</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-section">Edit</div>
+    <div class="context-menu-item" id="ctx-edit"><span>✏️</span> Edit Value</div>
+    <div class="context-menu-item" id="ctx-add-key"><span>➕</span> Add Key</div>
+    <div class="context-menu-item" id="ctx-delete-key"><span>🗑️</span> Delete Key</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-section">Actions</div>
+    <div class="context-menu-item" id="ctx-view-table"><span>📊</span> View as Table</div>
+    <div class="context-menu-item" id="ctx-search-google"><span>🔍</span> Search in Google</div>
+    <div class="context-menu-item" id="ctx-highlight-keys"><span>🖌️</span> Highlight Matching Keys</div>
+    <div class="context-menu-item" id="ctx-filter-key"><span>🔬</span> Filter This Key</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" id="ctx-detect-type"><span>ℹ️</span> Show Data Type <span class="type-indicator" id="ctx-type-badge"></span></div>
+  </div>
+
+  <!-- Add Key Modal -->
+  <div class="modal" id="add-key-modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header"><h3>Add New Key</h3><button class="btn btn-icon modal-close" id="add-key-modal-close">×</button></div>
+      <div class="modal-body">
+        <label class="modal-label">Key Name:</label>
+        <input type="text" id="add-key-name" class="modal-input" placeholder="Enter key name">
+        <label class="modal-label" style="margin-top: 12px;">Value Type:</label>
+        <select id="add-key-type" class="modal-input">
+          <option value="string">String</option>
+          <option value="number">Number</option>
+          <option value="boolean">Boolean</option>
+          <option value="null">Null</option>
+          <option value="object">Object {}</option>
+          <option value="array">Array []</option>
+        </select>
+        <label class="modal-label" id="add-key-value-label" style="margin-top: 12px;">Value:</label>
+        <!-- String input -->
+        <input type="text" id="add-key-value-string" class="modal-input add-key-value-input" placeholder="Enter text value">
+        <!-- Number input -->
+        <input type="number" id="add-key-value-number" class="modal-input add-key-value-input" placeholder="Enter number" step="any" style="display: none;">
+        <!-- Boolean select -->
+        <select id="add-key-value-boolean" class="modal-input add-key-value-input" style="display: none;">
+          <option value="true">true</option>
+          <option value="false">false</option>
+        </select>
+        <!-- Null display -->
+        <input type="text" id="add-key-value-null" class="modal-input add-key-value-input" value="null" disabled style="display: none;">
+        <!-- Object display -->
+        <input type="text" id="add-key-value-object" class="modal-input add-key-value-input" value="{}" disabled style="display: none;">
+        <!-- Array display -->
+        <input type="text" id="add-key-value-array" class="modal-input add-key-value-input" value="[]" disabled style="display: none;">
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="add-key-cancel">Cancel</button>
+        <button class="btn btn-primary" id="add-key-confirm">Add Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" id="delete-key-modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header"><h3>Delete Key</h3><button class="btn btn-icon modal-close" id="delete-key-modal-close">×</button></div>
+      <div class="modal-body">
+        <p style="margin-bottom: 12px;">Are you sure you want to delete this key?</p>
+        <div class="delete-preview" id="delete-preview" style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px; font-family: monospace; font-size: 13px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="delete-key-cancel">Cancel</button>
+        <button class="btn btn-danger" id="delete-key-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Tooltip -->
+  <div class="date-tooltip" id="date-tooltip" style="display: none;">
+    <div class="date-formatted" id="date-formatted"></div>
+    <div class="date-relative" id="date-relative"></div>
+    <div class="date-original" id="date-original"></div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="../js/jq-lite.js"></script>
+  <script src="../js/tree-graph.js"></script>
+  <script src="../js/ui-renderer.js"></script>
+  <script src="../js/viewer.js"></script>
+</body>
+</html>

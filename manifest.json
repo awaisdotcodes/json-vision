@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "JSON Vision - Best JSON Formatter and JSON Viewer",
+  "version": "3.9.7",
+  "description": "JSON formatter, viewer & editor. Tree view, graph visualization, beautifier, validator, JQ queries, diff tool, dark themes.",
+  "author": "awais.codes",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "action": {
+    "default_popup": "html/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "html/viewer.html",
+        "js/viewer.js",
+        "js/tree-graph.js",
+        "js/ui-renderer.js",
+        "js/jq-lite.js",
+        "css/viewer.css",
+        "css/graph.css",
+        "css/ui-renderer.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
