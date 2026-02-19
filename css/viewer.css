@@ -2191,12 +2191,12 @@ body {
 .type-badge.type-array { background: var(--type-array-bg); color: #a855f7; }
 
 /* ============================================
-   TOGGLE BUTTON — animated + / − icon
+   TOGGLE BUTTON — rotating filled triangle
    ============================================ */
 
-/* Hide the ▶/▼ text node; ::before/::after draw the icon */
+/* Hide ▶/▼ text node; ::before draws the triangle */
 .toggle {
-  width: 16px;
+  width: 20px;
   height: 20px;
   display: inline-flex;
   align-items: center;
@@ -2204,46 +2204,40 @@ body {
   cursor: pointer;
   user-select: none;
   flex-shrink: 0;
-  margin-right: 2px;
-  font-size: 0;        /* hides ▶/▼ text */
+  margin-right: 1px;
+  font-size: 0;
   color: transparent;
   position: relative;
 }
 
-/* Horizontal bar — always visible */
+/* Filled right-pointing triangle via CSS borders */
 .toggle::before {
   content: '';
-  position: absolute;
-  width: 8px;
-  height: 1.5px;
-  background: var(--text-muted);
-  border-radius: 1px;
-  transition: background-color 0.15s;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent var(--text-secondary);
+  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.15s;
+  transform: rotate(0deg);
+  transform-origin: 35% 50%;
 }
 
-/* Vertical bar — collapses (scaleY → 0) when expanded */
+/* Remove the old ::after bar */
 .toggle::after {
-  content: '';
-  position: absolute;
-  width: 1.5px;
-  height: 8px;
-  background: var(--text-muted);
-  border-radius: 1px;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity   0.15s ease,
-              background-color 0.15s;
+  display: none;
 }
 
-/* Expanded: vertical bar shrinks away → leaves a clean − */
-.json-row:not(.collapsed) > .toggle::after {
-  transform: scaleY(0);
-  opacity: 0;
+/* Expanded: rotate 90° → triangle points down */
+.json-row:not(.collapsed) > .toggle::before {
+  transform: rotate(90deg);
+  border-color: transparent transparent transparent var(--accent);
 }
 
-/* Hover: accent colour */
-.toggle:hover::before,
-.toggle:hover::after {
-  background: var(--accent);
+/* Hover */
+.toggle:hover::before {
+  border-color: transparent transparent transparent var(--text-primary);
 }
 
 /* ============================================
