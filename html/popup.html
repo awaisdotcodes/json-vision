@@ -5,171 +5,266 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSON Vision</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       width: 520px;
-      min-height: 420px;
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      padding: 24px;
+      background: #111113;
+      color: #d4d4d8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 14px;
     }
 
+    .top-bar {
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 55%, #06b6d4 100%);
+    }
+
+    .container {
+      padding: 18px 20px 20px;
+    }
+
+    /* ── Header ── */
     .header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       margin-bottom: 16px;
     }
 
-    .brand-link {
+    .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
-      transition: opacity 0.2s;
+      color: inherit;
+      transition: opacity 0.15s;
+    }
+    .brand:hover { opacity: 0.8; }
+
+    .brand img { width: 30px; height: 30px; flex-shrink: 0; }
+
+    .brand-text { display: flex; flex-direction: column; gap: 1px; }
+
+    .brand-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f4f4f5;
+      letter-spacing: -0.2px;
+      line-height: 1.1;
     }
 
-    .brand-link:hover {
-      opacity: 0.8;
-    }
-
-    .header h1 {
-      font-size: 22px;
-      font-weight: 600;
-      color: #fff;
+    .brand-version {
+      font-size: 10.5px;
+      color: #52525b;
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      letter-spacing: 0.2px;
     }
 
     .header-right {
-      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
     }
 
-    .info {
-      font-size: 12px;
-      color: #e8e4dc;
-      margin-bottom: 3px;
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px 3px 8px;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.18);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #4ade80;
+      letter-spacing: 0.1px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex-shrink: 0;
+      animation: pulse-dot 2.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 70%, 100% { opacity: 1; }
+      35% { opacity: 0.25; }
     }
 
     .credit {
-      font-size: 12px;
-      color: #e8e4dc;
+      font-size: 11px;
+      color: #3f3f46;
     }
-
     .credit a {
-      color: #a5b4fc;
+      color: #52525b;
       text-decoration: none;
+      transition: color 0.15s;
     }
+    .credit a:hover { color: #818cf8; }
 
-    .credit a:hover {
-      text-decoration: underline;
-      color: #c7d2fe;
+    /* ── Textarea ── */
+    .input-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #52525b;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
     }
 
     textarea {
       width: 100%;
-      height: 320px;
-      background-color: #252526;
-      border: 1px solid #3c3c3c;
+      height: 288px;
+      display: block;
+      background: #18181b;
+      border: 1px solid #27272a;
       border-radius: 8px;
-      color: #d4d4d4;
+      color: #e4e4e7;
       font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-      font-size: 14px;
-      padding: 16px;
+      font-size: 13px;
+      padding: 13px 14px;
       resize: vertical;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      line-height: 1.65;
+      margin-bottom: 12px;
     }
 
     textarea:focus {
       border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.13);
     }
 
-    textarea::placeholder {
-      color: #6d6d6d;
-    }
+    textarea::placeholder { color: #3f3f46; }
 
+    /* ── Buttons ── */
     .button-row {
       display: flex;
-      gap: 14px;
-      margin-top: 16px;
+      gap: 8px;
     }
 
     button {
-      flex: 1;
-      padding: 14px 20px;
       border: none;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
-    .btn-primary {
-      background-color: #6366f1;
+    .btn-clear {
+      padding: 11px 16px;
+      background: transparent;
+      border: 1px solid #27272a;
+      color: #71717a;
+      white-space: nowrap;
+    }
+    .btn-clear:hover {
+      background: #27272a;
+      color: #a1a1aa;
+      border-color: #3f3f46;
+    }
+
+    .btn-format {
+      flex: 1;
+      padding: 11px 20px;
+      background: #6366f1;
       color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-format:hover {
+      background: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.22), 0 2px 8px rgba(99, 102, 241, 0.28);
+      transform: translateY(-1px);
+    }
+    .btn-format:active {
+      transform: none;
+      box-shadow: none;
+      background: #4338ca;
     }
 
-    .btn-primary:hover {
-      background-color: #7c7ff2;
+    .shortcut-hint {
+      font-size: 11px;
+      font-weight: 400;
+      opacity: 0.65;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      font-family: 'SF Mono', Consolas, monospace;
+      letter-spacing: 0;
     }
 
-    .btn-secondary {
-      background-color: #3c3c3c;
-      color: #d4d4d4;
-    }
-
-    .btn-secondary:hover {
-      background-color: #4a4a4a;
-    }
-
+    /* ── Error ── */
     .error-message {
-      margin-top: 16px;
-      padding: 14px;
-      background-color: #5a1d1d;
-      border: 1px solid #8b3535;
-      border-radius: 8px;
-      color: #f48771;
-      font-size: 14px;
       display: none;
+      margin-top: 10px;
+      padding: 10px 13px;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.22);
+      border-radius: 8px;
+      color: #f87171;
+      font-size: 12.5px;
+      line-height: 1.5;
     }
 
-    .error-message.show {
-      display: block;
+    .error-message.show { display: block; }
+
+    .error-message::before {
+      content: '⚠ ';
+      font-size: 13px;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <a href="https://dub.sh/sourcelogs" target="_blank" class="brand-link">
-      <img class="logo" src="../icons/logo.png" alt="JSON Vision">
-      <h1>JSON Vision</h1>
-    </a>
-    <div class="header-right">
-      <div class="info">JSON pages are automatically formatted</div>
-      <div class="credit">built by <a href="https://dub.sh/sourcelogs" target="_blank" rel="noopener noreferrer">sourcelogs.com</a> | <a href="https://dub.sh/fiverr-profile" target="_blank" rel="noopener noreferrer">Hire Me</a></div>
+  <div class="top-bar"></div>
+  <div class="container">
+
+    <div class="header">
+      <a href="https://dub.sh/sourcelogs" target="_blank" class="brand">
+        <img src="../icons/logo.png" alt="JSON Vision">
+        <div class="brand-text">
+          <span class="brand-name">JSON Vision</span>
+          <span class="brand-version">v3.9.7</span>
+        </div>
+      </a>
+      <div class="header-right">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Active on JSON pages
+        </div>
+        <div class="credit">by <a href="https://dub.sh/sourcelogs" target="_blank">sourcelogs.com</a></div>
+      </div>
     </div>
+
+    <div class="input-label">Paste JSON</div>
+    <textarea
+      id="json-input"
+      placeholder='{ "key": "value", "array": [1, 2, 3] }'
+      spellcheck="false"
+      autofocus
+    ></textarea>
+
+    <div class="button-row">
+      <button class="btn-clear" id="clear-btn">Clear</button>
+      <button class="btn-format" id="format-btn">
+        Format JSON
+        <span class="shortcut-hint">⌘↵</span>
+      </button>
+    </div>
+
+    <div class="error-message" id="error-message"></div>
+
   </div>
-  <textarea 
-    id="json-input" 
-    placeholder='{"example": "Paste your JSON here...", "array": [1, 2, 3]}'
-    spellcheck="false"
-    autofocus
-  ></textarea>
-
-  <div class="button-row">
-    <button class="btn-secondary" id="clear-btn">Clear</button>
-    <button class="btn-primary" id="format-btn">Format JSON</button>
-  </div>
-
-  <div class="error-message" id="error-message"></div>
-
   <script src="../js/popup.js"></script>
 </body>
 </html>

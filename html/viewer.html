@@ -18,9 +18,7 @@
           <span class="brand-name">JSON Vision</span>
         </a>
         <span class="brand-separator">|</span>
-        <span class="brand-tagline">built by <a href="https://dub.sh/sourcelogs" target="_blank">sourcelogs.com</a></span>
-        <span class="brand-separator">|</span>
-        <a href="https://dub.sh/fiverr-profile" target="_blank" class="hire-link">Hire Me</a>
+        <span class="brand-tagline">by <a href="https://dub.sh/sourcelogs" target="_blank">sourcelogs.com</a></span>
       </div>
     </div>
     <div class="toolbar-right">
@@ -54,8 +52,14 @@
       </div>
       <div class="btn-divider"></div>
       <div class="toolbar-group">
-        <button class="btn" id="expand-all" title="Expand All"><span>Expand All</span></button>
-        <button class="btn" id="collapse-all" title="Collapse All"><span>Collapse All</span></button>
+        <button class="btn" id="expand-all" title="Expand All">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+          <span>Expand</span>
+        </button>
+        <button class="btn" id="collapse-all" title="Collapse All">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="10" y1="14" x2="3" y2="21"></line><line x1="21" y1="3" x2="14" y2="10"></line></svg>
+          <span>Collapse</span>
+        </button>
       </div>
       <div class="btn-divider"></div>
       <div class="toolbar-group">
@@ -88,13 +92,31 @@
         </div>
       </div>
       <div class="btn-divider"></div>
-      <button class="btn" id="import-url-btn" title="Import from URL"><span>Import URL</span></button>
+      <button class="btn" id="import-url-btn" title="Import from URL">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        <span>Import URL</span>
+      </button>
       <div class="btn-divider"></div>
-      <button class="btn" id="compare-btn" title="Compare"><span>Compare</span></button>
-      <button class="btn" id="table-btn" title="Table View"><span>Table</span></button>
-      <button class="btn" id="graph-btn" title="Graph View"><span>Graph</span></button>
-      <button class="btn" id="ui-btn" title="UI Preview"><span>UI</span></button>
-      <button class="btn" id="raw-btn" title="Raw View"><span id="raw-btn-text">Raw</span></button>
+      <button class="btn btn-view" id="compare-btn" title="Compare JSON">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+        <span>Diff</span>
+      </button>
+      <button class="btn btn-view" id="table-btn" title="Table View">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+        <span>Table</span>
+      </button>
+      <button class="btn btn-view" id="graph-btn" title="Graph View">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+        <span>Graph</span>
+      </button>
+      <button class="btn btn-view" id="ui-btn" title="UI Preview">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        <span>UI</span>
+      </button>
+      <button class="btn btn-view" id="raw-btn" title="Raw View">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <span id="raw-btn-text">Raw</span>
+      </button>
     </div>
   </div>
 
@@ -195,7 +217,8 @@
     <div class="diff-container" id="diff-container" style="display: none;">
       <div class="diff-toolbar">
         <div class="diff-toolbar-left">
-          <h3>🔄 Compare JSON</h3>
+          <h3>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>Compare JSON</h3>
           <p>Paste another JSON below to compare.</p>
         </div>
         <div class="diff-toolbar-right">
@@ -219,9 +242,18 @@
           <span class="table-info" id="table-info"></span>
         </div>
         <div class="table-view-toolbar-right">
-          <button class="btn" id="table-export-json">📄 Export JSON</button>
-          <button class="btn" id="table-export-csv">📊 Export CSV</button>
-          <button class="btn" id="table-export-excel">📗 Export Excel</button>
+          <button class="btn" id="table-export-json">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            Export JSON
+          </button>
+          <button class="btn" id="table-export-csv">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            Export CSV
+          </button>
+          <button class="btn" id="table-export-excel">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Export Excel
+          </button>
           <div class="table-separator"></div>
           <button class="btn btn-back" id="table-back"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 3L3 8l4 5v-3h6V6H7V3z"/></svg> Back to Tree</button>
         </div>
@@ -310,33 +342,82 @@
   <!-- Context Menu -->
   <div class="context-menu" id="context-menu">
     <div class="context-menu-section">Copy</div>
-    <div class="context-menu-item" id="ctx-copy-path"><span>📋</span> Copy Path <span class="shortcut" id="ctx-path-preview"></span></div>
+    <div class="context-menu-item" id="ctx-copy-path">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      Copy Path <span class="shortcut" id="ctx-path-preview"></span>
+    </div>
     <div class="context-menu-item has-submenu" id="ctx-copy-path-as">
-      <span>📋</span> Copy Path As
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      Copy Path As
       <span class="submenu-arrow">▶</span>
       <div class="context-submenu" id="copy-path-submenu">
-        <div class="context-menu-item" id="ctx-path-jsonpath"><span>📍</span> JSONPath</div>
-        <div class="context-menu-item" id="ctx-path-jq"><span>🔧</span> JQ</div>
-        <div class="context-menu-item" id="ctx-path-javascript"><span>🟨</span> JavaScript</div>
-        <div class="context-menu-item" id="ctx-path-python"><span>🐍</span> Python</div>
+        <div class="context-menu-item" id="ctx-path-jsonpath">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          JSONPath
+        </div>
+        <div class="context-menu-item" id="ctx-path-jq">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          JQ
+        </div>
+        <div class="context-menu-item" id="ctx-path-javascript">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          JavaScript
+        </div>
+        <div class="context-menu-item" id="ctx-path-python">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0z" transform="translate(4,4) scale(0.67)"></path><polyline points="4 17 10 11 4 5"></polyline></svg>
+          Python
+        </div>
       </div>
     </div>
-    <div class="context-menu-item" id="ctx-copy-key"><span>🔑</span> Copy Key</div>
-    <div class="context-menu-item" id="ctx-copy-value"><span>📄</span> Copy Value</div>
-    <div class="context-menu-item" id="ctx-copy-complete"><span>📦</span> Copy Complete</div>
+    <div class="context-menu-item" id="ctx-copy-key">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+      Copy Key
+    </div>
+    <div class="context-menu-item" id="ctx-copy-value">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      Copy Value
+    </div>
+    <div class="context-menu-item" id="ctx-copy-complete">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
+      Copy Complete
+    </div>
     <div class="context-menu-divider"></div>
     <div class="context-menu-section">Edit</div>
-    <div class="context-menu-item" id="ctx-edit"><span>✏️</span> Edit Value</div>
-    <div class="context-menu-item" id="ctx-add-key"><span>➕</span> Add Key</div>
-    <div class="context-menu-item" id="ctx-delete-key"><span>🗑️</span> Delete Key</div>
+    <div class="context-menu-item" id="ctx-edit">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+      Edit Value
+    </div>
+    <div class="context-menu-item" id="ctx-add-key">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      Add Key
+    </div>
+    <div class="context-menu-item" id="ctx-delete-key">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+      Delete Key
+    </div>
     <div class="context-menu-divider"></div>
     <div class="context-menu-section">Actions</div>
-    <div class="context-menu-item" id="ctx-view-table"><span>📊</span> View as Table</div>
-    <div class="context-menu-item" id="ctx-search-google"><span>🔍</span> Search in Google</div>
-    <div class="context-menu-item" id="ctx-highlight-keys"><span>🖌️</span> Highlight Matching Keys</div>
-    <div class="context-menu-item" id="ctx-filter-key"><span>🔬</span> Filter This Key</div>
+    <div class="context-menu-item" id="ctx-view-table">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+      View as Table
+    </div>
+    <div class="context-menu-item" id="ctx-search-google">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Search in Google
+    </div>
+    <div class="context-menu-item" id="ctx-highlight-keys">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      Highlight Matching Keys
+    </div>
+    <div class="context-menu-item" id="ctx-filter-key">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+      Filter This Key
+    </div>
     <div class="context-menu-divider"></div>
-    <div class="context-menu-item" id="ctx-detect-type"><span>ℹ️</span> Show Data Type <span class="type-indicator" id="ctx-type-badge"></span></div>
+    <div class="context-menu-item" id="ctx-detect-type">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      Show Data Type <span class="type-indicator" id="ctx-type-badge"></span>
+    </div>
   </div>
 
   <!-- Add Key Modal -->
