@@ -100,6 +100,16 @@
     document.querySelectorAll('.theme-item').forEach(item => {
       item.classList.toggle('active', item.dataset.theme === currentTheme);
     });
+    // Update theme button: show current theme dot + name
+    const themeLabels = { dark: 'Dark', light: 'Light', monokai: 'Monokai', dracula: 'Dracula', nord: 'Nord', solarized: 'Solarized', github: 'GitHub Dark' };
+    const themeColors = { dark: '#0c0c0d', light: '#f5f5f7', monokai: '#272822', dracula: '#282a36', nord: '#2e3440', solarized: '#002b36', github: '#0d1117' };
+    const dot = document.querySelector('#theme-btn .theme-btn-dot');
+    const label = document.querySelector('#theme-btn .theme-btn-label');
+    if (dot) {
+      dot.style.background = themeColors[currentTheme] || '#0c0c0d';
+      dot.style.border = currentTheme === 'light' ? '1px solid #aaa' : 'none';
+    }
+    if (label) label.textContent = themeLabels[currentTheme] || currentTheme;
   }
 
   function setTheme(theme) {
@@ -542,14 +552,14 @@
       } else {
         // No JSON in storage - show helpful message
         loading.innerHTML = `
-          <div class="error" style="text-align: center;">
-            <h3 style="margin-bottom: 12px;">No JSON to display</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 16px;">
-              Navigate to a JSON file or API response to view it here.
-            </p>
-            <p style="color: var(--text-muted); font-size: 12px;">
-              You can also use Tools → Import from URL to load JSON from a URL.
-            </p>
+          <div class="empty-state-content">
+            <img src="../icons/logo.png" alt="JSON Vision" class="empty-state-logo">
+            <h2 class="empty-state-title">No JSON loaded</h2>
+            <p class="empty-state-desc">Navigate to any <code>.json</code> URL or API endpoint<br>and it will be formatted here automatically.</p>
+            <div class="empty-state-hints">
+              <div class="empty-hint"><span class="empty-hint-key">Popup</span> Paste JSON via the extension icon</div>
+              <div class="empty-hint"><span class="empty-hint-key">Import URL</span> Fetch JSON from any endpoint</div>
+            </div>
           </div>`;
       }
     });
@@ -1606,13 +1616,22 @@
     graphContainer.style.display = v === 'graph' ? 'flex' : 'none';
     uiContainer.style.display = v === 'ui' ? 'flex' : 'none';
     tableViewContainer.style.display = v === 'table' ? 'flex' : 'none';
-    
+
+    // Update active view button highlight
+    const viewBtnMap = { raw: 'raw-btn', diff: 'compare-btn', graph: 'graph-btn', ui: 'ui-btn', table: 'table-btn' };
+    document.querySelectorAll('.btn-view').forEach(b => b.classList.remove('active'));
+    if (viewBtnMap[v]) document.getElementById(viewBtnMap[v])?.classList.add('active');
+
+    // Hide search bar for views that don't use it
+    const searchBarEl = document.querySelector('.search-bar');
+    if (searchBarEl) searchBarEl.classList.toggle('search-hidden', !['tree', 'raw'].includes(v));
+
     // Reset button states
     if (v !== 'diff') {
       diffInput.value = '';
       diffResults.innerHTML = '';
     }
-    
+
     // Render view-specific content
     if (v === 'graph') renderGraphView();
     if (v === 'ui') renderUIView();
@@ -3469,10 +3488,11 @@
     });
   }
 
-  function showToast(message) {
+  function showToast(message, type = '') {
     toast.textContent = message;
-    toast.classList.add('visible');
-    setTimeout(() => toast.classList.remove('visible'), 2500);
+    toast.className = 'toast' + (type ? ' toast-' + type : '');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
   }
 
   // Expose showToast globally for inline handlers

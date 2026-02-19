@@ -2076,17 +2076,7 @@ body {
 }
 
 /* JSON rendering classes */
-.toggle {
-  cursor: pointer;
-  user-select: none;
-  color: var(--text-muted);
-  margin-right: 4px;
-  font-size: 10px;
-}
-
-.toggle:hover {
-  color: var(--text-primary);
-}
+/* .toggle styles are now fully defined in the TOGGLE BUTTON section at the bottom */
 
 .key {
   color: var(--json-key);
@@ -2201,6 +2191,62 @@ body {
 .type-badge.type-array { background: var(--type-array-bg); color: #a855f7; }
 
 /* ============================================
+   TOGGLE BUTTON — animated + / − icon
+   ============================================ */
+
+/* Hide the ▶/▼ text node; ::before/::after draw the icon */
+.toggle {
+  width: 16px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  margin-right: 2px;
+  font-size: 0;        /* hides ▶/▼ text */
+  color: transparent;
+  position: relative;
+}
+
+/* Horizontal bar — always visible */
+.toggle::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 1.5px;
+  background: var(--text-muted);
+  border-radius: 1px;
+  transition: background-color 0.15s;
+}
+
+/* Vertical bar — collapses (scaleY → 0) when expanded */
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 1.5px;
+  height: 8px;
+  background: var(--text-muted);
+  border-radius: 1px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.15s ease,
+              background-color 0.15s;
+}
+
+/* Expanded: vertical bar shrinks away → leaves a clean − */
+.json-row:not(.collapsed) > .toggle::after {
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* Hover: accent colour */
+.toggle:hover::before,
+.toggle:hover::after {
+  background: var(--accent);
+}
+
+/* ============================================
    ACTIVE VIEW BUTTON STATES
    ============================================ */
 
@@ -2277,4 +2323,210 @@ body {
 
 #search-input:focus {
   box-shadow: 0 0 0 3px rgba(69, 161, 255, 0.12);
+}
+
+/* ============================================
+   VIEW SWITCHER — segmented control
+   ============================================ */
+
+.view-switcher {
+  display: flex;
+  align-items: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.view-switcher .btn-view {
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.view-switcher .btn-view:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  border: none;
+}
+
+.view-switcher .btn-view.active {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+.view-switcher .btn-view.active:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+/* ============================================
+   TOAST — fix .visible → .show + variants
+   ============================================ */
+
+/* Alias: JS uses .visible but original CSS had .show */
+.toast.visible,
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.toast-error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.toast.toast-success {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+/* ============================================
+   SEARCH BAR — hide when not relevant
+   ============================================ */
+
+.search-bar.search-hidden {
+  display: none !important;
+}
+
+/* ============================================
+   JQ QUERY BUTTON — normalize to toolbar style
+   ============================================ */
+
+.btn-jq {
+  background: var(--bg-tertiary);
+  color: var(--accent);
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.btn-jq:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+/* ============================================
+   THEME BUTTON — dot + label in button
+   ============================================ */
+
+.theme-btn-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #0c0c0d;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.theme-btn-label {
+  font-size: 13px;
+}
+
+/* ============================================
+   EMPTY STATE — no JSON loaded
+   ============================================ */
+
+.loading .empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 32px;
+  text-align: center;
+  gap: 12px;
+}
+
+.empty-state-logo {
+  width: 56px;
+  height: 56px;
+  opacity: 0.2;
+  margin-bottom: 8px;
+  filter: grayscale(30%);
+  animation: empty-breathe 3s ease-in-out infinite;
+}
+
+@keyframes empty-breathe {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(1.04); }
+}
+
+.empty-state-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.empty-state-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 340px;
+}
+
+.empty-state-desc code {
+  color: var(--json-string);
+  font-family: 'Menlo', monospace;
+  font-size: 12px;
+  background: var(--bg-tertiary);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.empty-state-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.empty-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.empty-hint-key {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ============================================
+   LOADING SPINNER — branded
+   ============================================ */
+
+.loading {
+  gap: 12px;
+}
+
+.loading span {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+  border-top-color: var(--accent);
 }
